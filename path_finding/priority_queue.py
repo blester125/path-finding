@@ -61,6 +61,7 @@ def test_empty():
     h.put(None)
     assert not h.empty()
 
+
 if __name__ == "__main__":
     test_heap()
     test_heap_property()

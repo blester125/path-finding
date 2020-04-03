@@ -1,5 +1,9 @@
-from priority_queue import PriorityQueue
 from queue import Queue
+from copy import deepcopy
+from collections import defaultdict
+from itertools import combinations, chain
+from .priority_queue import PriorityQueue
+from .graph import AdjacencyGraph
 
 
 def breath_first_search(graph, start, end):
@@ -21,7 +25,7 @@ def breath_first_search(graph, start, end):
     # If we exhaust the frontier (the queue ran out without the break) without finding the goal it means it is unreach-able
     else:
         raise ValueError(f"Goal: {end} unreachable from Start: {start}")
-    return backtrack
+    return backtrack, None
 
 
 def dijkstra(graph, start, end):
@@ -46,7 +50,7 @@ def dijkstra(graph, start, end):
     # If we exhaust the frontier (the queue ran out without the break) without finding the goal it means it is unreach-able
     else:
         raise ValueError(f"Goal: {end} unreachable from Start: {start}")
-    return backtrack
+    return backtrack, cost[end]
 
 
 def manhattan_distance(start, end):
@@ -75,7 +79,8 @@ def a_star(graph, start, end, heuristic):
     # If we exhaust the frontier (the queue ran out without the break) without finding the goal it means it is unreach-able
     else:
         raise ValueError(f"Goal: {end} unreachable from Start: {start}")
-    return backtrack
+    return backtrack, cost[end]
+
 
 def reconstruct_path(backtrack, end):
     curr = end
@@ -87,11 +92,41 @@ def reconstruct_path(backtrack, end):
     return path[::-1][1:-1]
 
 
-def path_find(graph, start, end, algorithm="a_start"):
+def path_find(graph, start, end, algorithm="a-star"):
     if algorithm == "bfs":
-        backs = breath_first_search(graph, start, end)
+        backs, cost = breath_first_search(graph, start, end)
     elif algorithm == "dijkstra":
-        backs = dijkstra(graph, start, end)
+        backs, cost = dijkstra(graph, start, end)
     else:
-        backs = a_star(graph, start, end, manhattan_distance)
-    return reconstruct_path(backs, end)
+        backs, cost = a_star(graph, start, end, manhattan_distance)
+    return reconstruct_path(backs, end), cost
+
+
+def fuel_path_find(capacity, graph, start, end, stations, algorithm="a-star"):
+    edges = []
+    paths = defaultdict(lambda: defaultdict(dict))
+
+    # Find paths to all stations from the start, from all stations to the end, and between all stations
+    for src, tgt in combinations(chain([start, end], stations), 2):
+        path, cost = path_find(graph, src, tgt, algorithm)
+        cost = cost if cost is not None else len(path) + 1
+        # The returned paths don't have the start/end so there is an extra moves to make
+        if cost <= capacity:
+            edges.append((src, tgt, cost))
+            # Track the actual paths from point to point to reconstruct later
+            paths[src][tgt]['path'] = path
+            paths[tgt][src]['path'] = path
+            paths[src][tgt]['cost'] = cost
+            paths[tgt][src]['cost'] = cost
+
+    meta_graph = AdjacencyGraph(edges)
+    meta_path, meta_cost = path_find(meta_graph, start, end, algorithm)
+
+    # Reconstruct the real path
+    meta_path = list(chain([start], meta_path, [end]))
+    path = []
+    cost = 0
+    for i in range(1, len(meta_path)):
+        path.extend(deepcopy(paths[meta_path[i - 1]][meta_path[i]]['path']))
+        cost += paths[meta_path[i - 1]][meta_path[i]]['cost']
+    return path, cost
