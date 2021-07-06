@@ -9,7 +9,7 @@ def main():
     parser.add_argument("data")
     parser.add_argument("--start_symbol", default="R")
     parser.add_argument("--end_symbol", default="G")
-    parser.add_argument("--algorithm", choices=("bfs", "dijkstra", "a-star"), default="a-start")
+    parser.add_argument("--algorithm", choices=("bfs", "dijkstra", "a-star"), default="a-star")
     args = parser.parse_args()
 
     graph = GridGraph.from_file(args.data)
