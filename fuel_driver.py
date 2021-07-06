@@ -11,9 +11,10 @@ def main():
     parser.add_argument("--end_symbol", default="G")
     parser.add_argument("--fuel_symbol", default="+")
     parser.add_argument("--algorithm", choices=("bfs", "dijkstra", "a-star"), default="a-star")
+    parser.add_argument("--no-diagonal", action="store_true")
     args = parser.parse_args()
 
-    capacity, graph = FuelGridGraph.from_file(args.data)
+    capacity, graph = FuelGridGraph.from_file(args.data, no_diagonal=args.no_diagonal)
     start = next(graph.find(args.start_symbol))
     end = next(graph.find(args.end_symbol))
     stations = list(graph.find(args.fuel_symbol))

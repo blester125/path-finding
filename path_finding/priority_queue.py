@@ -1,26 +1,45 @@
 import heapq
+from typing import Optional, Sequence, Callable, Any
 
 
 class PriorityQueue:
-    def __init__(self, data=None, key=lambda x: None):
-        self.heap = data if data is not None else []
+    def __init__(self,
+                 data: Optional[Sequence[Any]] = None,
+                 key: Optional[Callable[[Any], float]]= None
+    ):
+        """Priority queue as a class.
+
+        Args:
+          data: Initial data in the queue.
+          key: A function that calculates the priority value for items in the
+            queue. If not provided the priority of each items will just depend
+            on the comparison or items.
+        """
+        self.heap = list(data) if data is not None else []
         if key:
             self.heap = [(key(item), item) for item in self.heap]
         heapq.heapify(self.heap)
         self.key = key
 
-    def put(self, item):
+    def put(self, item: Any):
+        """Add item to the queue."""
         if self.key:
             item = (self.key(item), item)
         heapq.heappush(self.heap, item)
 
-    def get(self):
-        return heapq.heappop(self.heap)[1]
+    def get(self) -> Any:
+        """Get the first item from the queue."""
+        item = heapq.heappop(self.heap)
+        if self.key:
+            return item[1]
+        return item
 
     def __len__(self):
         return len(self.heap)
 
     def empty(self):
+        # `len(self)` will proxy to `__len__` which will check the length
+        # of the `self.heap` list.
         return len(self) == 0
 
 
@@ -39,6 +58,7 @@ def test_heap():
 
 
 def test_heap_property():
+    """Test my heap by using it for heap sort."""
     import random
     data = [random.randint(1, 1000) for _ in range(random.randint(50, 100))]
     gold = sorted(data)
@@ -67,4 +87,4 @@ if __name__ == "__main__":
     test_heap_property()
     test_keyed_data()
     test_empty()
-    print("Smoke Tests Passed!")
+    print("Smoke Tests Pass!")

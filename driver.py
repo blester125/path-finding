@@ -10,9 +10,10 @@ def main():
     parser.add_argument("--start_symbol", default="R")
     parser.add_argument("--end_symbol", default="G")
     parser.add_argument("--algorithm", choices=("bfs", "dijkstra", "a-star"), default="a-star")
+    parser.add_argument("--no-diagonal", action="store_true")
     args = parser.parse_args()
 
-    graph = GridGraph.from_file(args.data)
+    graph = GridGraph.from_file(args.data, no_diagonal=args.no_diagonal)
     start = next(graph.find(args.start_symbol))
     end = next(graph.find(args.end_symbol))
 
