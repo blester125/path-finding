@@ -7,7 +7,7 @@ This has the code for the problem of finding a path through a grid world
 
 The program can be run with the following.
 
-#+begin_src shell :results verbatim :export both
+#+begin_src shell :results verbatim :exports both
 python driver.py data/5.txt
 #+end_src
 
@@ -81,7 +81,7 @@ Cost of path: 178.4680374315354
 #####################..........................###############################
 #+end_example
 
-#+begin_src shell :results verbatim :export both
+#+begin_src shell :results verbatim :exports both
 python driver.py data/5.txt --no-diagonal
 #+end_src
 
@@ -181,7 +181,7 @@ This has code for finding a path through a grid world where the agent can only m
 
 The program can be run with the following.
 
-#+begin_src shell :results verbatim :export both
+#+begin_src shell :results verbatim :exports both
 python fuel_driver.py fuel_data/3.txt
 #+end_src
 
@@ -255,7 +255,7 @@ Cost of path: 124.76955262170047
 #####################..........................###############################
 #+end_example
 
-#+begin_src shell :results verbatim :export both
+#+begin_src shell :results verbatim :exports both
 python fuel_driver.py fuel_data/3.txt --no-diagonal
 #+end_src
 
