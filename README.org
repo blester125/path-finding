@@ -15,7 +15,7 @@ There is also a command line argument (=--algorithm=) that lets you pick which a
 
  - Breath First Search :: =--algorithm bfs=
  - Dijkstra's algorithm :: =--algorithm dijkstra=
- - A$^{*}$ Search :: with a Manhattan Distance heuristic =--algorithm a-star=
+ - A* Search :: A-start search that uses a Manhattan Distance heuristic =--algorithm a-star=
 
 ** Data Format
 Data is assumed to be an ASCII grid with the following symbols:
