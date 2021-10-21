@@ -165,7 +165,7 @@ There is also a command line argument (=--algorithm=) that lets you pick which a
 
 ** Movement
 
-The =--no-diagonal= command line arguments can specify if diagonal movement is allowed in the grid world. Setting this flag means the only valid moves are up, down, left, and right (modulo environmental constraints), while the defaults also allows movements like =up one and left one= to count as a single move. When diagonal movement is allowed, moving on the diagonal does come at a higher cost √2 opposed to 1.
+The =--no-diagonal= command line arguments can specify if diagonal movement is allowed in the grid world. Setting this flag means the only valid moves are up, down, left, and right (modulo environmental constraints), while the defaults also allows movements like =up one and left one= to count as a single move. When diagonal movement is allowed, moving on the diagonal does come at a higher cost (√2 opposed to 1).
 
 ** Data Format
 Data is assumed to be an ASCII grid with the following symbols:
